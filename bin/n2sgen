@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar $(dirname "$0")/../target/scala-2.12/n2sgen-assembly-1.0.jar
