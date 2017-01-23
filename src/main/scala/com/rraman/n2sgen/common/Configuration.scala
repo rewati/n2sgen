@@ -7,7 +7,7 @@ import scala.io.Source
 import scala.util.Try
 
 /**
-  * Created by Rewati Raman (rewati.raman@hart.com).
+  * Created by Rewati Raman (rewati.raman@gmail.com).
   */
 object Configuration {
 

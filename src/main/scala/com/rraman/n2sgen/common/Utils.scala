@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 import scala.io.Source
 
 /**
-  * Created by Rewati Raman (rewati.raman@hart.com).
+  * Created by Rewati Raman (rewati.raman@gmail.com).
   */
 object Utils {
 
