@@ -24,15 +24,15 @@ object Configuration {
   var config = loadN2SgenConf
   def loadN2SgenConf = {
     val file = new File("./n2sgen.conf").getCanonicalFile
-    Source.fromFile(file).getLines().foreach(x => {
+    Try(Source.fromFile(file).getLines().toList.foreach(x => Try{
       val prop = x.split('=').toList
       System.setProperty(prop(0),prop(1))
-    })
+    }))
     new InternalConfig(ConfigFactory.load())
   }
 
   def reload = {config = loadN2SgenConf}
 
-  def projectName = config ("project-name","Unknown")
-  val nav = config ("nav","").split(',').toList
+  def projectName = config ("project-name","")
+  def nav = config ("nav","").split(',').toList
 }

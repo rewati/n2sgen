@@ -15,7 +15,7 @@ import scala.util.Try
   */
 object CommandFunction {
 
-  def projectName = Option(Configuration.projectName).getOrElse("Project name missing.")
+  def projectName = Option(Configuration.projectName).filter(!_.isEmpty).getOrElse(Try(currentDirectory.split('/').last).getOrElse("Project name missing."))
   def prompt = print(s"${projectName + (if(!isInitialized)" not initialized" else "")}>>> ")
   def welcomeMessage = {
     println("Welcome n2sgen. Yet another static site generator. Built in scala.")
@@ -27,6 +27,9 @@ object CommandFunction {
   def initializeProject = {
     def initialize = {
       createProject
+      createAndThenWriteToFile(defaultTemplateFile,defaultTemplate)
+      createAndThenWriteToFile(defaultCssFile,defaultCss)
+      createAndThenWriteToFile(confFileName,defaultConf.replace("###project###",projectName))
       println(s"Project ${projectName} is initialized.")
     }
     def alreadyInitialized = println(s"Error: ${projectName} is already initialized.")
@@ -38,8 +41,9 @@ object CommandFunction {
     Try(readLine).toOption map (createPage)
   }
 
-  def createTagIndexPage(sourceMetas: List[MdSourceMeta], tag: String, template: String) = {
-    val content = sourceMetas .map (x => Utils.createIndexPage(x.fileUrl,x.title,x.date)) mkString
+  def createIndexHtmlPage(sourceMetas: List[MdSourceMeta], tag: Option[String], template: String) = {
+    val content = sourceMetas .map (x =>
+      Utils.createIndexPage(s"../blog/${x.date}/${x.title.trim.replace(' ','-')}.htm",x.title,x.date)) mkString
     val html = template replace("###content###",content)
     createTagIndexFile(tag,html)
   }
@@ -53,10 +57,14 @@ object CommandFunction {
     val tags = tagMap .keySet
     tags map (x => createDirectory(s"${generatedCode}/${x}"))
     val tagContentMap = tags .map  (x => (x,tagMap.get(x).map(_.size).get,s"/${x}/index.htm")) .toSet
-    val nav = tagContentMap .filter(x => Configuration.nav.contains(x._1)) .map (x => Utils.createNav(x._3,x._1)) .mkString
+    val nav = Option(tagContentMap .filter(x => Configuration.nav.contains(x._1)) .map (x => Utils.createNav(x._3,x._1)) .mkString)
+      .fold("")(x => s"<nav><ul>$x</ul></nav>")
+    println("nav"+nav)
     val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName)
     (sourceFiles map createHtmlFileForMdSourceMeta ) foreach (y => y map (x => HtmlFileCreation(x._2,x._1,template)))
-    tagMap   .foreach (x => createTagIndexPage(x._2,x._1,template))
+    tagMap   .foreach (x => createIndexHtmlPage(x._2,Some(x._1),template))
+    createIndexHtmlPage(sourceFiles,None,template)
+    createAndThenWriteToFile(s"${generatedCode}/css/style.css",Utils.readFromFile(defaultCssFile).mkString)
   }
 
 }
@@ -68,16 +76,23 @@ object FileOperations {
   val contentDirName = "content"
   val aboutMe = s"${contentDirName}/aboutMe.md"
   val templateDirName = "templates"
+  val defaultTemplateFile = s"${templateDirName}/template"
+  val defaultCssFile = s"${templateDirName}/css"
   val generatedCode = "generated"
   val blog = s"${generatedCode}/blog"
   val tag = s"${generatedCode}/tag"
+  val ccsDir = s"${generatedCode}/css"
+  val css = s"${generatedCode}/css/style.css"
   def confFilePath = s"${currentDirectory}/${confFileName}"
   def confFile = Option(new File(confFileName)).filter(_.exists)
   def currentDirectory = new File(".").getCanonicalPath
   def createN2SGenConfFile = new FileOutputStream(confFilePath, true).close()
   def createDirectory(dirName: String) = (new File(dirName)).mkdirs
   def createFile(fileName: String) = (new File(fileName)).createNewFile
-  val newPageContent = Source.fromResource("template/md-page-template.txt").mkString
+  val newPageContent = Utils.readFromResource("template/md-page-template.txt")
+  val defaultCss = Utils.readFromResource("template/site.css")
+  val defaultTemplate = Utils.readFromResource("template/siteTemplate.txt")
+  val defaultConf = Utils.readFromResource("template/n2sgen.conf")
 
   def createPage(title: String) = {
     def replace(content: String,field: String,seq: String) = content.replace(s"###${field}###",seq)
@@ -97,29 +112,29 @@ object FileOperations {
 
   case class HtmlFileCreation(mdSourceMeta: MdSourceMeta, content: String, template: String) {
     val dirUrl = s"${blog}/${mdSourceMeta.date}"
-    val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.hmt"
+    val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.htm"
     createDirectory(dirUrl)
     val heading = s"<h1>${mdSourceMeta.title}</h1>"
     val html = template.replace("###content###",heading+content)
-    (new PrintWriter(url) {
-      write(html)
-      close
-    }.checkError)
+    createAndThenWriteToFile(url,html)
   }
 
-  def createTagIndexFile(tag: String, html: String) = {
-    val url = s"${generatedCode}/${tag}/index.htm"
-    (new PrintWriter(url) {
-      write(html)
-      close
-    }.checkError)
+  def createTagIndexFile(tag: Option[String], html: String) = {
+    val url = tag .fold (s"${generatedCode}/index.htm")(x => s"${generatedCode}/${x}/index.htm")
+    createAndThenWriteToFile(url,html)
   }
+
+  def createAndThenWriteToFile(url: String, content: String) = (new PrintWriter(url) {
+    write(content)
+    close
+  }.checkError)
+
 
   def createProject = {
     createN2SGenConfFile
     val directoriesNeeded =
-      List(contentDirName,templateDirName,generatedCode,blog,tag)
-    val filesNeeded = List(aboutMe)
+      List(contentDirName,templateDirName,generatedCode,blog,tag,ccsDir)
+    val filesNeeded = List(aboutMe,css)
     directoriesNeeded foreach createDirectory
     filesNeeded foreach createFile
   }
@@ -136,7 +151,7 @@ object FileOperations {
   } yield mds).filterNot(_ == None).filter(_.get.published)
 
   def createHtmlFileForMdSourceMeta(mdMetaSourceData: MdSourceMeta): Option[(String,MdSourceMeta)] =
-    Option(mdMetaSourceData).map(x => (Source.fromFile(x.fileUrl).getLines().drop(1).reduce(_+'\n'+_),x))
+    Option(mdMetaSourceData).map(x => (Utils.readMd(x.fileUrl),x))
       .map(x => (peg.markdownToHtml(x._1),x._2))
 
 }
