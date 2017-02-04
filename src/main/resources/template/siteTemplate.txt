@@ -1,30 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+
   <meta charset="utf-8">
   <title>###SiteTitle###</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-<body>
-    <div id="wrapper">
-      <header>
-            <div id="header-mobile-link"><a href="/">###SiteTitle###</a></div>
-            ###nav###
-        </header>
-        <div id="core" class="clearfix">
-            <section id="left">
-            </section>
-        <content>###content###</content>
-            <section id="right">
-            </section>
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  <script src="js/site.js"></script>
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="dist/images/favicon.png">
+
+</head>
+<body class="code-snippets-visible">
+<!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <section class="header">
+    <div class="row">
+          <div class="nine columns"><h2 class="title">###SiteTitle###</h2></div>
+          <div class="three columns"><img src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/05e/356/0016c16.jpg" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
         </div>
 
-        <footer>
-            <div>This site is powered by n2sgen static generator.</div>
-            <div>© 2017rewati.raman@gmail.com All Rights Reserved.</div>
-        </footer>
-    </div>
+    </section>
 
+    <div class="navbar-spacer"></div>
+    <nav class="navbar">
+      <div class="container">
+        <ul class="navbar-list">
+          ###nav###
+        </ul>
+      </div>
+    </nav>
+    <div class="docs-section" id="grid">
+      ###content###
+    </div>
+    <!-- Why use Skeleton -->
+
+    <footer>
+      <div class="docs-section" id="grid">
+        <div class="row">
+            <div class="six columns">This site is powered by n2sgen static generator.</div>
+            <div class="six columns">2017 rewati.raman@gmail.com All Rights Reserved.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>

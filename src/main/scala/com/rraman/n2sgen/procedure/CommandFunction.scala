@@ -4,7 +4,7 @@ import com.rraman.n2sgen.procedure.FileOperations._
 import java.io.{File, FileOutputStream, PrintWriter}
 
 import com.rraman.n2sgen.common.{Configuration, Utils}
-import org.pegdown.PegDownProcessor
+import org.pegdown.{Extensions, PegDownProcessor}
 
 import scala.io.Source
 import scala.io.StdIn._
@@ -27,8 +27,6 @@ object CommandFunction {
   def initializeProject = {
     def initialize = {
       createProject
-      createAndThenWriteToFile(defaultTemplateFile,defaultTemplate)
-      createAndThenWriteToFile(defaultCssFile,defaultCss)
       createAndThenWriteToFile(confFileName,defaultConf.replace("###project###",projectName))
       println(s"Project ${projectName} is initialized.")
     }
@@ -43,7 +41,7 @@ object CommandFunction {
 
   def createIndexHtmlPage(sourceMetas: List[MdSourceMeta], tag: Option[String], template: String) = {
     val content = sourceMetas .map (x =>
-      Utils.createIndexPage(s"../blog/${x.date}/${x.title.trim.replace(' ','-')}.htm",x.title,x.date)) mkString
+      Utils.createArticleItem(articleListTemplate,s"../blog/${x.date}/${x.title.trim.replace(' ','-')}.htm",x.title,x.date,x.tags)) mkString
     val html = template replace("###content###",content)
     createTagIndexFile(tag,html)
   }
@@ -58,9 +56,9 @@ object CommandFunction {
     tags map (x => createDirectory(s"${generatedCode}/${x}"))
     val tagContentMap = tags .map  (x => (x,tagMap.get(x).map(_.size).get,s"/${x}/index.htm")) .toSet
     val nav = Option(tagContentMap .filter(x => Configuration.nav.contains(x._1)) .map (x => Utils.createNav(x._3,x._1)) .mkString)
-      .fold("")(x => s"<nav><ul>$x</ul></nav>")
-    println("nav"+nav)
-    val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName)
+      .fold("")(x => s"${Utils.homeLi}$x")
+    val aboutMe = Utils.readFromFile(FileOperations.aboutMe).mkString
+    val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName).replace("###aboutme###",aboutMe)
     (sourceFiles map createHtmlFileForMdSourceMeta ) foreach (y => y map (x => HtmlFileCreation(x._2,x._1,template)))
     tagMap   .foreach (x => createIndexHtmlPage(x._2,Some(x._1),template))
     createIndexHtmlPage(sourceFiles,None,template)
@@ -71,7 +69,7 @@ object CommandFunction {
 
 object FileOperations {
 
-  val peg = new  PegDownProcessor
+  val peg = new  PegDownProcessor(Extensions.FENCED_CODE_BLOCKS)
   val confFileName = "n2sgen.conf"
   val contentDirName = "content"
   val aboutMe = s"${contentDirName}/aboutMe.md"
@@ -92,6 +90,7 @@ object FileOperations {
   val newPageContent = Utils.readFromResource("template/md-page-template.txt")
   val defaultCss = Utils.readFromResource("template/site.css")
   val defaultTemplate = Utils.readFromResource("template/siteTemplate.txt")
+  val articleListTemplate = Utils.readFromResource("template/articleListTemplate.txt")
   val defaultConf = Utils.readFromResource("template/n2sgen.conf")
 
   def createPage(title: String) = {
@@ -114,8 +113,10 @@ object FileOperations {
     val dirUrl = s"${blog}/${mdSourceMeta.date}"
     val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.htm"
     createDirectory(dirUrl)
-    val heading = s"<h1>${mdSourceMeta.title}</h1>"
-    val html = template.replace("###content###",heading+content)
+    val heading = s"<h3>${mdSourceMeta.title}</h3>"
+    val article = """<div class="row"><div class="eleven columns">###article###</div></div>"""
+      .replace("###article###",heading+content)
+    val html = template.replace("###content###",article)
     createAndThenWriteToFile(url,html)
   }
 
@@ -137,6 +138,8 @@ object FileOperations {
     val filesNeeded = List(aboutMe,css)
     directoriesNeeded foreach createDirectory
     filesNeeded foreach createFile
+    createAndThenWriteToFile(defaultTemplateFile,defaultTemplate)
+    createAndThenWriteToFile(defaultCssFile,defaultCss)
   }
 
   def listAllFilesInDirectory(dir: String): List[String] = {
@@ -154,6 +157,7 @@ object FileOperations {
     Option(mdMetaSourceData).map(x => (Utils.readMd(x.fileUrl),x))
       .map(x => (peg.markdownToHtml(x._1),x._2))
 
+  def markdownTextToHtml(md: String) = peg.markdownToHtml(md)
 }
 
 case class MdSourceMeta(title: String,published: Boolean,date: String,fileUrl: String, tags: Set[String])

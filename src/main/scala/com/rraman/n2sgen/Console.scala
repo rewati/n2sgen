@@ -74,6 +74,7 @@ object Server {
     resource_handler.setDirectoriesListed(true)
     resource_handler.setWelcomeFiles( Array("index.htm"))
     resource_handler.setResourceBase(s"./${FileOperations.generatedCode}")
+    resource_handler.setDirectoriesListed(false)
     val handlers = new HandlerList()
     handlers.setHandlers(Array( resource_handler, new DefaultHandler() ))
     server.setHandler(handlers)
