@@ -15,28 +15,27 @@ Download the latest release from the [release page] (https://github.com/rewati/n
 
 Extract the downloaded package. cd to the n2sgen directory and run: 
 ```
-cd $N2SGEN
-sbt assembly
+  cd $N2SGEN
+  sbt assembly
 ```
 After building add n2sgen executable to the PATH.
 ```
-export PATH=$N2SGEN/bin:$PATH
+  export PATH=$N2SGEN/bin:$PATH
 ```
 
 ## Create Project
 
   - Create a project
   ```
-  mkdir myProject
-  
-  cd myProject
+    mkdir myProject
+    cd myProject
   ```
   - Launch n2sgen client.
   ```
-  n2sgen
-  Welcome n2sgen. Yet another static site generator. Built in scala.
-  Project name = myProject
-  myProject not initialized>>>
+    n2sgen
+    Welcome n2sgen. Yet another static site generator. Built in scala.
+    Project name = myProject
+    myProject not initialized>>>
   ```
 ## n2sgen client commands 
 ```
@@ -53,46 +52,46 @@ export PATH=$N2SGEN/bin:$PATH
   
   - Initialize project and exit
   ```
-  myProject not initialized>>> init
-  Project myProject is initialized.
-  myProject>>> exit
+    myProject not initialized>>> init
+    Project myProject is initialized.
+    myProject>>> exit
   ```
   - Open n2sgen conf file
   ```
-  vi n2sgen.conf
+    vi n2sgen.conf
   ```
   - Configure project name and the tags that should show in navigation bar on the site and save n2.sgen conf file.
   ```
-  project-name=My Project
-  nav=Scala,Java,Dev
+    project-name=My Project
+    nav=Scala,Java,Dev
   ```
   - Change template
   ```
-  vi templates/template
+    vi templates/template
   ```
   - Change style
   ```
-  vi templates/css
+    vi templates/css
   ```
   - Launch n2sgen client and run conf.
   ```
-  n2sgen
-  Welcome n2sgen. Yet another static site generator. Built in scala.
-  Project name = My Project
-  My Project>>>
+    n2sgen
+    Welcome n2sgen. Yet another static site generator. Built in scala.
+    Project name = My Project
+    My Project>>>
   ```
   
 ## Create new page
 
   ```
-  My Project>>> new
-  Title: First page
-  My Project>>>
+    My Project>>> new
+    Title: First page
+    My Project>>>
   ```
   This will create content/First-page.md. This page will have following as first line.
   
   ```
-  <<<?title=First page||date=2017/02/04||tags=||published=false?>>>
+    <<<?title=First page||date=2017/02/04||tags=||published=false?>>>
   ```
   - published need to be set true if the page is ready to be published.
   - title is the tile of the page.
@@ -101,22 +100,22 @@ export PATH=$N2SGEN/bin:$PATH
 ## Generate html pages
 
 ```
-compile
+  compile
 ```
 
 ### Launch local server
 
 ```
-Project name = My Project
-My Project>>> serve
-Please enter the Port: 8080
-2017-02-04 16:48:10.813:INFO::main: Logging initialized @6040ms
-Server started press Enter.
-My Project>>> 2017-02-04 16:48:10.875:INFO:oejs.Server:scala-execution-context-global-10: jetty-9.1.z-SNAPSHOT
-2017-02-04 16:48:10.907:INFO:oejs.ServerConnector:scala-execution-context-global-10: Started ServerConnector@7b58c7e9{HTTP/1.1}{0.0.0.0:8080}
-2017-02-04 16:48:10.908:INFO:oejs.Server:scala-execution-context-global-10: Started @6154ms
+  Project name = My Project
+  My Project>>> serve
+  Please enter the Port: 8080
+  2017-02-04 16:48:10.813:INFO::main: Logging initialized @6040ms
+  Server started press Enter.
+  My Project>>> 2017-02-04 16:48:10.875:INFO:oejs.Server:scala-execution-context-global-10: jetty-9.1.z-SNAPSHOT
+  2017-02-04 16:48:10.907:INFO:oejs.ServerConnector:scala-execution-context-global-10: Started        ServerConnector@7b58c7e9{HTTP/1.1}{0.0.0.0:8080}
+  2017-02-04 16:48:10.908:INFO:oejs.Server:scala-execution-context-global-10: Started @6154ms
 
-My Project>>>
+  My Project>>>
 ```
 
   Go to http://localhost:8080/ 
