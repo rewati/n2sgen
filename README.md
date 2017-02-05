@@ -25,12 +25,12 @@ After building add n2sgen executable to the PATH.
 
 ## Create Project
 
-  - Create a project
+  Create a project
   ```
     mkdir myProject
     cd myProject
   ```
-  - Launch n2sgen client.
+  Launch n2sgen client.
   ```
     n2sgen
     Welcome n2sgen. Yet another static site generator. Built in scala.
@@ -50,30 +50,30 @@ After building add n2sgen executable to the PATH.
 ```
 ## Configure Project
   
-  - Initialize project and exit
+  Initialize project and exit
   ```
     myProject not initialized>>> init
     Project myProject is initialized.
     myProject>>> exit
   ```
-  - Open n2sgen conf file
+  Open n2sgen conf file
   ```
     vi n2sgen.conf
   ```
-  - Configure project name and the tags that should show in navigation bar on the site and save n2.sgen conf file.
+  Configure project name and the tags that should show in navigation bar on the site and save n2.sgen conf file.
   ```
     project-name=My Project
     nav=Scala,Java,Dev
   ```
-  - Change template
+  Change template
   ```
     vi templates/template
   ```
-  - Change style
+  Change style
   ```
     vi templates/css
   ```
-  - Launch n2sgen client and run conf.
+  Launch n2sgen client and run conf.
   ```
     n2sgen
     Welcome n2sgen. Yet another static site generator. Built in scala.
