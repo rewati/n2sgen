@@ -28,6 +28,7 @@ export PATH=$N2SGEN/bin:$PATH
   - Create a project
   ```
   mkdir myProject
+  
   cd myProject
   ```
   - Launch n2sgen client.
