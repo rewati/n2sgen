@@ -48,6 +48,9 @@ After building add n2sgen executable to the PATH.
   conf              Will reload the configuration.
   serve             Will launch a local server with the generate content.
 ```
+
+rsync and ftp dont work in current version. Will be working in second version.
+
 ## Configure Project
   
   Initialize project and exit
