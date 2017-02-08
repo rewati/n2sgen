@@ -37,7 +37,6 @@
     <section class="header">
     <div class="row">
           <div class="nine columns"><h2 class="title">###SiteTitle###</h2></div>
-          <div class="three columns"><img src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/05e/356/0016c16.jpg" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
         </div>
 
     </section>
@@ -54,7 +53,7 @@
       ###content###
     </div>
     <!-- Why use Skeleton -->
-
+    ###disqus###
     <footer>
       <div class="docs-section" id="grid">
         <div class="row">

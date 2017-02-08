@@ -20,6 +20,7 @@ object Utils {
     template .replace("###herf###",herf) .replace("###title###",title) .replace("###date###",date)
       .replace("###tags###",createTagLinks(tagList))
   def template = Source.fromFile("templates/template")
+  def disqus: String = Option(Source.fromFile("templates/disqus").mkString ).fold("")(x => x)
   def readFromFile(url: String) = Source.fromFile(url)
   def readFromResource(url: String) = Source.fromResource(url).mkString
   def readMd(url: String) = {

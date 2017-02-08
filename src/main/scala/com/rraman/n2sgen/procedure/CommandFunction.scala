@@ -58,10 +58,11 @@ object CommandFunction {
     val nav = Option(tagContentMap .filter(x => Configuration.nav.contains(x._1)) .map (x => Utils.createNav(x._3,x._1)) .mkString)
       .fold("")(x => s"${Utils.homeLi}$x")
     val aboutMe = Utils.readFromFile(FileOperations.aboutMe).mkString
-    val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName).replace("###aboutme###",aboutMe)
-    (sourceFiles map createHtmlFileForMdSourceMeta ) foreach (y => y map (x => HtmlFileCreation(x._2,x._1,template)))
-    tagMap   .foreach (x => createIndexHtmlPage(x._2,Some(x._1),template))
-    createIndexHtmlPage(sourceFiles,None,template)
+    val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName)
+      .replace("###aboutme###",aboutMe)
+    (sourceFiles map createHtmlFileForMdSourceMeta ) foreach (y => y map (x => HtmlFileCreation(x._2,x._1,template.replace("###disqus###",Utils.disqus))))
+    tagMap   .foreach (x => createIndexHtmlPage(x._2,Some(x._1),template.replace("###disqus###","")))
+    createIndexHtmlPage(sourceFiles,None,template.replace("###disqus###",""))
     createAndThenWriteToFile(s"${generatedCode}/css/style.css",Utils.readFromFile(defaultCssFile).mkString)
   }
 
@@ -76,6 +77,7 @@ object FileOperations {
   val templateDirName = "templates"
   val defaultTemplateFile = s"${templateDirName}/template"
   val defaultCssFile = s"${templateDirName}/css"
+  val defaultDisqusFile = s"${templateDirName}/disqus"
   val generatedCode = "generated"
   val blog = s"${generatedCode}/blog"
   val tag = s"${generatedCode}/tag"
@@ -92,6 +94,8 @@ object FileOperations {
   val defaultTemplate = Utils.readFromResource("template/siteTemplate.txt")
   val articleListTemplate = Utils.readFromResource("template/articleListTemplate.txt")
   val defaultConf = Utils.readFromResource("template/n2sgen.conf")
+  val defaultDisqus = Utils.readFromResource("template/disqus.txt")
+
 
   def createPage(title: String) = {
     def replace(content: String,field: String,seq: String) = content.replace(s"###${field}###",seq)
@@ -116,7 +120,7 @@ object FileOperations {
     val heading = s"<h3>${mdSourceMeta.title}</h3>"
     val article = """<div class="row"><div class="eleven columns">###article###</div></div>"""
       .replace("###article###",heading+content)
-    val html = template.replace("###content###",article)
+    val html = template.replace("###content###",article).replace("###pageurl###",url).replace("###pageId###",url.replace('/','-'))
     createAndThenWriteToFile(url,html)
   }
 
@@ -140,6 +144,7 @@ object FileOperations {
     filesNeeded foreach createFile
     createAndThenWriteToFile(defaultTemplateFile,defaultTemplate)
     createAndThenWriteToFile(defaultCssFile,defaultCss)
+    createAndThenWriteToFile(defaultDisqusFile,defaultDisqus)
   }
 
   def listAllFilesInDirectory(dir: String): List[String] = {
