@@ -104,15 +104,15 @@ rsync and ftp dont work in current version. Will be working in second version.
 
 
   ```
-    My Project>>> new
-    Title: First page
-    My Project>>>
+  My Project>>> new
+  Title: First page
+  My Project>>>
   ```
   This will create content/First-page.md. This page will have following as first line.
   
   
   ```
-    <<<?title=First page||date=2017/02/04||tags=||published=false?>>>
+  <<<?title=First page||date=2017/02/04||tags=||published=false?>>>
   ```
   - published need to be set true if the page is ready to be published.
   - title is the tile of the page.
