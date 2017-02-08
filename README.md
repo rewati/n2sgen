@@ -14,11 +14,14 @@ Download the latest release from the [release page] (https://github.com/rewati/n
 ### Installing
 
 Extract the downloaded package. cd to the n2sgen directory and run: 
+
 ```
   cd $N2SGEN
   sbt assembly
 ```
+
 After building add n2sgen executable to the PATH.
+
 ```
   export PATH=$N2SGEN/bin:$PATH
 ```
@@ -26,18 +29,23 @@ After building add n2sgen executable to the PATH.
 ## Create Project
 
   Create a project
+  
   ```
     mkdir myProject
     cd myProject
   ```
   Launch n2sgen client.
+  
   ```
     n2sgen
     Welcome n2sgen. Yet another static site generator. Built in scala.
     Project name = myProject
     myProject not initialized>>>
   ```
+  
 ## n2sgen client commands 
+
+
 ```
   init              Initialize project. This will create basic structure.
   new               Will create new page.
@@ -54,29 +62,37 @@ rsync and ftp dont work in current version. Will be working in second version.
 ## Configure Project
   
   Initialize project and exit
+  
   ```
     myProject not initialized>>> init
     Project myProject is initialized.
     myProject>>> exit
   ```
+  
   Open n2sgen conf file
+  
   ```
     vi n2sgen.conf
   ```
+  
   Configure project name and the tags that should show in navigation bar on the site and save n2.sgen conf file.
+  
   ```
     project-name=My Project
     nav=Scala,Java,Dev
   ```
   Change template
+  
   ```
     vi templates/template
   ```
   Change style
+  
   ```
     vi templates/css
   ```
   Launch n2sgen client and run conf.
+  
   ```
     n2sgen
     Welcome n2sgen. Yet another static site generator. Built in scala.
@@ -86,12 +102,14 @@ rsync and ftp dont work in current version. Will be working in second version.
   
 ## Create new page
 
+
   ```
     My Project>>> new
     Title: First page
     My Project>>>
   ```
   This will create content/First-page.md. This page will have following as first line.
+  
   
   ```
     <<<?title=First page||date=2017/02/04||tags=||published=false?>>>
