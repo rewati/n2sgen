@@ -1,4 +1,4 @@
-# N2SGEN [![Build Status](https://travis-ci.org/rewati/n2sgen.svg?branch=master)
+# N2SGEN ![Build Status](https://travis-ci.org/rewati/n2sgen.svg?branch=master)
 
 This is a simple static site generator for my personal sites. It uses Freemarker as a template engine and assumes that you write the content in Markdown. It has a built in web server, so it can also be used to serve the static pages generated. It should work well on any operating system provided that JRE8 is installed. To build it sbt need to be installed.
 
