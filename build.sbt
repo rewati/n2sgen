@@ -1,7 +1,7 @@
 name := "n2sgen"
 
 version := "2.0"
-
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
 scalaVersion := "2.12.1"
 
 val Versions = new {
