@@ -1208,6 +1208,10 @@ hr {
     display: table;
     clear: both; }
 
+.date-publish {
+    padding-bottom: 10px;
+}
+
 
 /* Media Queries
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

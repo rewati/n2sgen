@@ -5,6 +5,9 @@
             <h6 class="docs-header"><a id="article-id" href="###herf###">###title###</a></h6>
             </div>
             <div class="two columns">
+                <h6>Tags: </h6>
+            </div>
+            <div class="two columns">
               <h8>###tags###</h8>
             </div>
           </div>

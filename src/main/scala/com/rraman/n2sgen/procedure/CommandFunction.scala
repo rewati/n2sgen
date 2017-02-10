@@ -55,7 +55,8 @@ object CommandFunction {
     val tags = tagMap .keySet
     tags map (x => createDirectory(s"${generatedCode}/${x}"))
     val tagContentMap = tags .map  (x => (x,tagMap.get(x).map(_.size).get,s"/${x}/index.htm")) .toSet
-    val nav = Option(tagContentMap .filter(x => Configuration.nav.contains(x._1)) .map (x => Utils.createNav(x._3,x._1)) .mkString)
+    val navTagsFromConfig = Configuration.nav.map(_.toLowerCase)
+    val nav = Option(tagContentMap .filter(x => navTagsFromConfig.contains(x._1.toLowerCase)) .map (x => Utils.createNav(x._3,x._1)) .mkString)
       .fold("")(x => s"${Utils.homeLi}$x")
     val aboutMe = Utils.readFromFile(FileOperations.aboutMe).mkString
     val template = Utils.template.mkString.replace("###nav###",nav).replace("###SiteTitle###",projectName)
@@ -118,8 +119,9 @@ object FileOperations {
     val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.htm"
     createDirectory(dirUrl)
     val heading = s"<h3>${mdSourceMeta.title}</h3>"
-    val article = """<div class="row"><div class="eleven columns">###article###</div></div>"""
-      .replace("###article###",heading+content)
+    val article =
+      """<div class="row"><div class="six columns">###heading###<div class="date-publish">###date###</div></div><div class="twelve columns">###article###</div></div>""".stripMargin
+        .replace("###heading###",heading).replace("###article###",content).replace("###date###",Utils.articleDate(mdSourceMeta.date))
     val html = template.replace("###content###",article).replace("###pageurl###",url).replace("###pageId###",url.replace('/','-'))
     createAndThenWriteToFile(url,html)
   }

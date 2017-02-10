@@ -19,6 +19,7 @@ object Console extends App {
   def waitAndGetCommand: Unit = {
     prompt
     val command = Try(readLine .trim .toLowerCase).getOrElse("interrupt")
+    Configuration.reload
     Option(command) .map(_.split(' ')) .map(_.apply(0)) .map (Command(_))
     waitAndGetCommand
   }
@@ -32,15 +33,12 @@ object Command {
   val EXIT = Command("exit", "Will exit n2sgen shell.")
   val INTERRUPT = Command("interrupt","")
   val COMPILE = Command("compile","Compile and generate static html file.")
-  val RSYNC = Command("rsync","Rsync to remote server. Or can be rsync to HTTP server serving content location.")
-  val FTP = Command("ftp","Ftp to remote server. Or can be ftp to HTTP server serving content location.")
   val EMPTY = Command("","")
   val NEW_PAGE = Command("new","Will create new page.")
   val HELP = Command("help","Will print this help.")
-  val CONFIGURE = Command("conf", "Will reload the configuration.")
   val SERVE = Command("serve", "Will launch a local server with the generate content.")
-  protected val allCommands = List(INIT,EXIT,EMPTY,INTERRUPT,NEW_PAGE,HELP,COMPILE,RSYNC,FTP,CONFIGURE,SERVE)
-  protected val validCommands = List(INIT,NEW_PAGE,HELP,COMPILE,RSYNC,FTP,CONFIGURE,SERVE)
+  protected val allCommands = List(INIT,EXIT,EMPTY,INTERRUPT,NEW_PAGE,HELP,COMPILE,SERVE)
+  protected val validCommands = List(INIT,NEW_PAGE,HELP,COMPILE,SERVE)
   protected def space(c: Command) = " "*(18-c.command.length)
   protected def printHelp = validCommands foreach (x => println(s"  ${x.command}${space(x)}${x.help}"))
   def apply (command: String): Unit = allCommands.find(_.command == command) match {
@@ -51,7 +49,6 @@ object Command {
     case Some(COMPILE) => compile
     case Some(EMPTY) =>
     case Some(NEW_PAGE) => ifInitialized (createNewPage)
-    case Some(CONFIGURE) => Configuration.reload
     case Some(SERVE) => Try(Server.start) match {
       case Failure(x) => println("Was not able to start server."+x.getMessage )
       case _ =>
@@ -64,9 +61,8 @@ object Command {
 }
 
 object Server {
-  var runing: Option[Server] = None
   import scala.concurrent.ExecutionContext.Implicits.global
-  def start: Unit = if (!runing.isDefined) {
+  def start: Unit =  {
     print("Please enter the Port: ")
     val port = Try(readInt()).getOrElse(8080)
     val server = new Server(port)
@@ -81,13 +77,7 @@ object Server {
     Future {
       server.start()
       server.join()
-      runing = Option(server)
     }
-    println("Server started press Enter.")
-  } else {
-    println(" Server is already running. Restarting...")
-    runing.get.stop()
-    runing = None
-    start
+    println("Server starting.. Press Enter.")
   }
 }

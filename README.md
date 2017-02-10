@@ -51,9 +51,6 @@ After building add n2sgen executable to the PATH.
   new               Will create new page.
   help              Will print this help.
   compile           Compile and generate static html file.
-  rsync             Rsync to remote server. Or can be rsync to HTTP server serving content location.
-  ftp               Ftp to remote server. Or can be ftp to HTTP server serving content location.
-  conf              Will reload the configuration.
   serve             Will launch a local server with the generate content.
 ```
 
@@ -91,7 +88,7 @@ rsync and ftp dont work in current version. Will be working in second version.
   ```
     vi templates/css
   ```
-  Launch n2sgen client and run conf.
+  Launch n2sgen client.
   
   ```
     n2sgen
@@ -117,6 +114,10 @@ rsync and ftp dont work in current version. Will be working in second version.
   - published need to be set true if the page is ready to be published.
   - title is the tile of the page.
   - tags is comma seperated tags the page belong to. Like scala,java
+  
+## Configure Disqus
+
+ Open templates/disqus file and replace ###discusjs### with the disqus js like: //**************.disqus.com/embed.js
   
 ## Generate html pages
 
