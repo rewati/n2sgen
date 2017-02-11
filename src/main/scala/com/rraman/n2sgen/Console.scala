@@ -1,14 +1,12 @@
 package com.rraman.n2sgen
 
-import com.rraman.n2sgen.common.Configuration
-import com.rraman.n2sgen.procedure.CommandFunction._
-import com.rraman.n2sgen.procedure.FileOperations
-import org.eclipse.jetty.server.{Handler, Server}
+import CommandFunction._
+import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.{DefaultHandler, HandlerList, ResourceHandler}
 
 import scala.concurrent.Future
 import scala.io.StdIn._
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 /**
   * Created by Rewati Raman (rewati.raman@gmail.com).
@@ -46,13 +44,13 @@ object Command {
     case Some(EXIT) => System.exit(0)
     case Some(INTERRUPT) => System.exit(1)
     case Some(HELP) => printHelp
-    case Some(COMPILE) => compile
+    case Some(COMPILE) => ifInitialized (compile)
     case Some(EMPTY) =>
     case Some(NEW_PAGE) => ifInitialized (createNewPage)
-    case Some(SERVE) => Try(Server.start) match {
+    case Some(SERVE) => ifInitialized (Try(Server.start) match {
       case Failure(x) => println("Was not able to start server."+x.getMessage )
       case _ =>
-    }
+    })
     case _ => {
       println("Unknown command.")
       printHelp

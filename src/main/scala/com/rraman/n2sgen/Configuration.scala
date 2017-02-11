@@ -1,6 +1,7 @@
-package com.rraman.n2sgen.common
+package com.rraman.n2sgen
 
 import java.io.File
+
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.io.Source

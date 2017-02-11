@@ -58,7 +58,7 @@
       <div class="docs-section" id="grid">
         <div class="row">
             <div class="six columns">This site is powered by n2sgen static generator.</div>
-            <div class="six columns">2017 rewati.raman@gmail.com All Rights Reserved.</div>
+            <div class="six columns">2017 All Rights Reserved.</div>
         </div>
       </div>
     </footer>
