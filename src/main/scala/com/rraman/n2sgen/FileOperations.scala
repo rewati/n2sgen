@@ -101,9 +101,10 @@ object FileOperations {
     val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.htm"
     createDirectory(dirUrl)
     val heading = s"<h3>${mdSourceMeta.title}</h3>"
+    val tags = createTagLinks (mdSourceMeta.tags)
     val article =
-      """<div class="row"><div class="six columns">###heading###<div class="date-publish">###date###</div></div><div class="twelve columns">###article###</div></div>""".stripMargin
-        .replace("###heading###",heading).replace("###article###",content).replace("###date###",articleDate(mdSourceMeta.date))
+      """<div class="row"><div class="six columns">###heading###<div class="date-publish">###date###</div>###tags###</div><div class="twelve columns">###article###</div></div>""".stripMargin
+        .replace("###heading###",heading).replace("###article###",content).replace("###date###",articleDate(mdSourceMeta.date)).replace("###tags###",tags)
     val html = template.replace("###content###",article).replace("###pageurl###",url).replace("###pageId###",url.replace('/','-'))
     createAndThenWriteToFile(url,html)
   }
