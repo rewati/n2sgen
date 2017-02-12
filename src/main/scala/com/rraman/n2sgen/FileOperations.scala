@@ -103,7 +103,7 @@ object FileOperations {
     val heading = s"<h3>${mdSourceMeta.title}</h3>"
     val tags = createTagLinks (mdSourceMeta.tags)
     val article =
-      """<div class="row"><div class="six columns">###heading###<div class="date-publish">###date###</div>###tags###</div><div class="twelve columns">###article###</div></div>""".stripMargin
+      """<div class="row"><div class="six columns">###heading###<div class="date-publish">###date###</div><div class="tags">Tags: ###tags###</div></div><div class="twelve columns">###article###</div></div>""".stripMargin
         .replace("###heading###",heading).replace("###article###",content).replace("###date###",articleDate(mdSourceMeta.date)).replace("###tags###",tags)
     val html = template.replace("###content###",article).replace("###pageurl###",url).replace("###pageId###",url.replace('/','-'))
     createAndThenWriteToFile(url,html)
