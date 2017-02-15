@@ -50,9 +50,9 @@ object CommandFunction {
 
   protected def createIndexHtmlPage(sourceMetas: List[MdSourceMeta], tag: Option[String], template: String) = {
     val articleListTemplate = resourceDefaultTemplateArticleList.content
-    val content = sourceMetas .map (x =>
+    val content = sourceMetas.reverse .map (x =>
       createArticleItem(articleListTemplate,
-        s"../blog/${x.date}/${x.title.trim.replace(' ','-')}.htm",x.title,x.date,x.tags)) mkString
+        s"/blog/${x.date}/${x.title.trim.replace(' ','-')}.htm",x.title,x.date,x.tags)) mkString
     val html = template replace("###content###",content)
     createTagIndexFile(tag,html)
   }

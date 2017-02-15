@@ -36,4 +36,5 @@ object Configuration {
 
   def projectName = config ("project-name","")
   def nav = config ("nav","").split(',').toList
+  def baseUrl = config("base-url","")
 }

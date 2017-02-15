@@ -120,7 +120,7 @@ object FileOperations {
     .replace("###name###",Option(name).map(string => string.substring(0, 1).toLowerCase() + string.substring(1)).getOrElse(""))
   def createArticleItem(template: String, herf: String, title: String, date: String, tagList: Set[String]) =
     template .replace("###herf###",herf) .replace("###title###",title) .replace("###date###",articleDate(date))
-      .replace("###tags###",createTagLinks(tagList))
+      .replace("###tags###",createTagLinks(tagList)).replace("###baseurl###",Configuration.baseUrl)
   def siteTemplate = Source.fromFile("templates/template")
 }
 case class MdSourceMeta(title: String,published: Boolean,date: String,fileUrl: String, tags: Set[String])
