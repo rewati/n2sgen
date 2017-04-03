@@ -74,7 +74,7 @@ object FileOperations {
       val url = s"blog/$title"
       val content = Option(newPageContent) .map(replace(_,"date",date))
         .map(replace(_,"url",url)) .map(replace(_,"title",title))
-      val pw = new PrintWriter(new File(s"${contentDirName}/${title.trim.replace(' ','-')}.md"))
+      val pw = new PrintWriter(new File(s"${contentDirName}/${title.trim.replace(' ','-').toLowerCase}.md"))
       pw.write(content.getOrElse(newPageContent))
       pw.close
     }
@@ -98,7 +98,7 @@ object FileOperations {
 
   case class HtmlFileCreation(mdSourceMeta: MdSourceMeta, content: String, template: String) {
     val dirUrl = s"${blog}/${mdSourceMeta.date}"
-    val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-')}.htm"
+    val url = s"${dirUrl}/${mdSourceMeta.title.trim.replace(' ','-').toLowerCase}.htm"
     createDirectory(dirUrl)
     val heading = s"<h3>${mdSourceMeta.title}</h3>"
     val tags = createTagLinks (mdSourceMeta.tags)
